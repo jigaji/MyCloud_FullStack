@@ -1,6 +1,6 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.permissions import AllowAny
 from django.http import FileResponse
 import logging
@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 import os
 from api import serializer as api_serializer
 from api import models as api_models
-
+from rest_framework.views import APIView
+from rest_framework.authentication import SessionAuthentication
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -16,6 +17,20 @@ logger = logging.getLogger(__name__)
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = api_serializer.MyTokenObtainPairSerializer
+
+
+class SessionView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(request, format=None):
+        return Response(
+            {
+                'userID': request.user.id,
+                'username': request.user.username,
+                'isAdmin': request.user.is_superuser
+            },
+            status=status.HTTP_200_OK)
 
 
 class RegisterView(generics.CreateAPIView):
@@ -81,6 +96,9 @@ class FileView(generics.RetrieveAPIView):
     serializer_class = api_serializer.FileSerializer
     permission_classes = [AllowAny]
     lookup_field = 'uid'
+    user = api_models.User.objects.get(id=1)
+    print(user.is_superuser)
+
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -106,7 +124,7 @@ class FileDownloadView(generics.GenericAPIView):
 
 class FileView(generics.GenericAPIView):
     queryset = api_models.File.objects.all()
-
+    
     def get(self, request, uid, *args, **kwargs):
         file_obj = self.queryset.get(uid=uid)
         file = open(file_obj.file.path, 'rb')
@@ -115,3 +133,16 @@ class FileView(generics.GenericAPIView):
     
 
 
+class AdminUserListView(APIView):
+   
+    def get(self , request ,format=None):
+        user = api_models.User.objects
+        serializer = api_serializer.UserSerializer(user, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class AdminUserListView(APIView):
+   
+    def get(self , request ,format=None):
+        file = api_models.File.objects
+        serializer = api_serializer.FileSerializer(file, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

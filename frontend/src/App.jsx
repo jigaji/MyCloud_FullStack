@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "../store/Store";
@@ -18,9 +18,13 @@ import ErrorPage from "./pages/ErrorPage";
 import { ToastContainer } from "react-toastify";
 import SharePage from "./pages/Share";
 import Profile from "./pages/Profile";
+import AdminUsers from "./pages/admin/Userlist";
+import AdminPanel from "./pages/admin/AdminLayout";
+
 
 function App(){
-const router = createBrowserRouter([
+  
+  const router = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
@@ -53,15 +57,19 @@ const router = createBrowserRouter([
         {
           path: "/files",
           element: <Files />,
+        },
+        {path: "/profile",
+          element:<Profile/>
         }
       ],
     },
     {path: "/share/:code",
     element:<SharePage/>
     },
-    {path: "/profile",
-      element:<Profile/>
-      }
+    {path: "/admin",
+      element:<AdminUsers/>
+      },
+    
   ]);
 
   return (

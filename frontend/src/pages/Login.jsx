@@ -36,7 +36,8 @@ function Login() {
         if (error) {
             alert(JSON.stringify(error));
             resetForm();
-        } else {
+        }
+         else {
             navigate("/home");
         }
 

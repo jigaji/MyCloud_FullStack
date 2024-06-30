@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {  useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/auth";
 import { register } from "../utils/auth";
 import LoadingIndicator from "../layouts/LoadingIndicator";
 // import "../styles/Form.css"
@@ -41,7 +40,7 @@ function Register() {
             alert(JSON.stringify(error));
             resetForm();
         } else {
-            navigate("/");
+            navigate("/login");
         }
 
         // Reset isLoading to false when the operation is complete

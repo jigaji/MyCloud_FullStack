@@ -7,6 +7,7 @@ import PageHeader from "../common/PageHeader";
 import Swal from "sweetalert2";
 import apiInstance from "../utils/axios";
 import useUserData from "../plugin/useUserData";
+import { useAuthStore } from "../store/auth";
 
 // Main component for displaying user's data
 const Data = () => {
@@ -18,7 +19,7 @@ const Data = () => {
     const fetchFiles = async () => {
         const file_res = await apiInstance.get(`files/${userId}/`);
         setFiles(file_res.data);
-        console.log(userId);
+        console.log(useUserData());
     };
   
     useEffect(() => {

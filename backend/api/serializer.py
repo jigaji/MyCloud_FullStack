@@ -64,6 +64,19 @@ class UserSerializer(serializers.ModelSerializer):
         model = api_models.User
         fields = '__all__'
 
+
+class RestrictedUserSerializer(serializers.ModelSerializer):
+    files = serializers.SerializerMethodField(source=api_models.File.objects.all())
+    
+    class Meta:
+        model = api_models.User
+        fields = ('id', 'username', 'files')
+        
+    def get_files(self, obj):
+        user_files = api_models.File.objects.filter(by_user=obj)
+        filenames = [file.filename for file in user_files if file.file]
+        return filenames
+
 class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -107,3 +120,5 @@ class FileSerializer(serializers.ModelSerializer):
         representation['by_user'] = user['username'] if user else None
 
         return representation
+    
+
