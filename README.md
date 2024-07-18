@@ -13,9 +13,9 @@ To run the project locally, follow these steps:
                 DJANGO_SECRET_KEY = '<DJANGO_SECRET_KEY>'
 
                 POSTGRES_DB = 'db name'
-                POSTGRES_USER = '<login>'
+                POSTGRES_USER = 'user'
                 POSTGRES_PASSWORD = '<password>'
-                POSTGRES_HOST = 'Host name>'
+                POSTGRES_HOST = '<Host name>'
                 POSTGRES_PORT = 'PORT'
 
 - Install the required dependencies usring:
